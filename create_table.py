@@ -14,14 +14,12 @@ def load_descriptions_json(filepath):
     return descriptions
 
 
-def generate_table(descriptions, classes):
+def generate_table(descriptions, amount_entities):
     table = []
 
     number = 1
     for image in descriptions:
         name_file = image["image"].split(".rf.")[0].replace("_", ".")
-        annotations = image["annotations"]
-        amount_entities = generate_amount_entities(classes, annotations)
         row = {
             COLUMNS[0]: number,
             COLUMNS[1]: name_file,
@@ -32,14 +30,14 @@ def generate_table(descriptions, classes):
     return table
 
 
-def generate_amount_entities(classes, annotations):
+def generate_amount_entities(labels, annotations):
     entities = []
     for annotation in annotations:
         entity = annotation["label"]
         entities.append(entity)
     counter = dict(Counter(entities))
     amount_entities = {}
-    for label in classes:
+    for label in labels:
         if label in counter:
             amount_entities[label] = counter[label]
         else:
@@ -47,9 +45,11 @@ def generate_amount_entities(classes, annotations):
     return amount_entities
 
 
-def create_csv(filename, table, classes):
+def create_csv(filename, table, amount_entities):
     with open(filename + ".csv", 'w') as file:
-        csv_writer = csv.DictWriter(file, delimiter=',', lineterminator='\r', fieldnames=COLUMNS + classes,
+        csv_writer = csv.DictWriter(file, delimiter=',',
+                                    lineterminator='\r',
+                                    fieldnames=COLUMNS + list(amount_entities.keys()),
                                     dialect='excel')
         csv_writer.writeheader()
         csv_writer.writerows(table)
@@ -64,15 +64,15 @@ def delete_file(filename):
     os.remove(filename)
 
 
-def create_excel(directory_of_dataset, classes):
+def create_excel(directory_of_dataset, amount_entities):
     images_sets = ("train",)
     annotations = []
     print("Getting annotations...")
     for images_set in images_sets:
         annotations += load_descriptions_json(directory_of_dataset + images_set + "/_annotations.createml.json")
     print("Generating table...")
-    table = generate_table(annotations, classes)
-    create_csv("output", table, classes)
+    table = generate_table(annotations, amount_entities)
+    create_csv("output", table, amount_entities)
     print("Converting to Excel...")
     convert_from_csv_to_excel("output", "report")
     print("Deleting temporal files...")

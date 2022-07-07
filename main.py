@@ -11,5 +11,5 @@ workspace = rf.workspace()
 project = workspace.project(PROJECT_ID)
 dataset = project.version(VERSION).download("createml")
 directory = project.name.replace(' ', '-') + f"-{dataset.name}/"
-classes = project.classes
-create_excel(directory, classes)
+amount_entities = project.classes
+create_excel(directory, amount_entities)
