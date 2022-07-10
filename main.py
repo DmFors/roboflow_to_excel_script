@@ -1,5 +1,5 @@
 from roboflow import Roboflow
-from create_table import create_excel
+from create_table import create_file
 
 print("Welcome!")
 API_KEY = input("Enter your API KEY: ")
@@ -11,4 +11,4 @@ workspace = rf.workspace()
 project = workspace.project(PROJECT_ID)
 dataset = project.version(VERSION).download("createml")
 directory = project.name.replace(' ', '-') + f"-{dataset.name}/"
-create_excel(directory)
+create_file(directory)
