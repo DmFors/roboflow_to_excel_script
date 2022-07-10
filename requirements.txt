@@ -1,3 +1,4 @@
+python_version == '3.9'
 certifi==2021.5.30
 chardet==4.0.0
 charset-normalizer==2.1.0
@@ -27,3 +28,4 @@ six==1.16.0
 tqdm==4.64.0
 urllib3==1.26.6
 wget==3.2
+XlsxWriter==3.0.3
