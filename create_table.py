@@ -77,7 +77,7 @@ def generate_table_for_word(annotations, amount_entities):
 
 
 def get_image_name(image_name):
-    return image_name.split(".rf.")[0].replace("_", ".")
+    return image_name.split(".rf.")[0].replace("_", ".", ).replace("--------", " - копия")
 
 
 def create_excel(filename, table, column_names):
