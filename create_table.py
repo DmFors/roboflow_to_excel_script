@@ -3,11 +3,11 @@ import os
 from collections import Counter
 import pandas as pd
 
-COLUMNS_FOR_EXCEL = ["Number", "Name_file", "car", "tramm", "bus", "pedestrian",
+COLUMNS_FOR_EXCEL = ["Number", "Name_file", "car", "tram", "bus", "pedestrian",
                      "scooter", "bicycle", "shuttle_taxi", "trolleybus", "truck", "motorcycle"]
 COLUMNS_FOR_WORD = ["Number", "Name_file", "Description"]
 
-TRANSLATION = {"car": "машина", "tramm": "трамвай", "bus": "автобус", "pedestrian": "пешеход", "scooter": "самокат",
+TRANSLATION = {"car": "машина", "tram": "трамвай", "bus": "автобус", "pedestrian": "пешеход", "scooter": "самокат",
                "bicycle": "велосипед", "shuttle_taxi": "маршрутка", "trolleybus": "троллейбус", "truck": "грузовик",
                "motorcycle": "мотоцикл"}
 
@@ -82,7 +82,13 @@ def get_image_name(image_name):
 
 def create_excel(filename, table, column_names):
     df = pd.DataFrame(table, columns=column_names)
-    writer = pd.ExcelWriter(filename + ".xlsx", engine='xlsxwriter')
+    while True:
+        try:
+            writer = pd.ExcelWriter(filename + ".xlsx", engine='xlsxwriter')
+        except PermissionError:
+            input("Please, close Excel app and press enter...")
+        else:
+            break
     df.to_excel(writer, sheet_name='Sheet1', index=False)
     writer.save()
 
